@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load slugify %}  {# Обязательно для использования фильтра slugify #}
+
+{% block content %}
+<style>
+    html {
+        scroll-behavior: smooth; /* Плавная прокрутка */
+    }
+</style>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Меню</h2>
+
+    <!-- 🔗 Навигация по категориям -->
+    <div class="text-center mb-5">
+        {% for category, items in menu.items %}
+            <a href="#{{ category|slugify }}" class="btn btn-outline-primary m-1">
+                {{ category }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <!-- 📦 Категории и товары -->
+    {% for category, items in menu.items %}
+        <h4 id="{{ category|slugify }}" class="mt-5">{{ category }}</h4>
+        <div class="row">
+            {% for item in items %}
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        {% if item.description %}
+                        <p class="card-text" style="font-size: 0.9em; color: #666;">
+                            {{ item.description|truncatewords:20 }}
+                        </p>
+                        {% endif %}
+                        <p class="mt-auto"><strong>Цена:</strong> {{ item.price }} сом</p>
+                        <a href="#" class="btn btn-dark btn-sm mt-2">Заказать</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% empty %}
+        <p class="text-center">Менюда азырынча маалымат жок.</p>
+    {% endfor %}
+</div>
+{% endblock %}
